@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>끝말잇기</title>
+</head>
+
+<body>
+    <div id="root"> <!--렌더링 화면 표시-->
+        <word-relay></word-relay>
+       <word-relay></word-relay>
+       <word-relay></word-relay>
+    </div>
+    <script> 
+        Vue.component('word-relay',{ //컴포넌트 재사용 //최상위 부모 태그로 묶어야함
+            template:`
+            <div> 
+                <div>{{text}}</div>
+                <form v-on:submit="onClickButton">
+                    <input type="text" v-model="newtext" ref = "newword">
+                    <button type="submit">입력</button>
+                </form>
+                <div>{{result}}</div>
+            </div>
+            `,
+            data() {   //data가 함수형 새로운 객체를 만들어야함
+                return{
+                    text: '',
+                    newtext: '',
+                    result: ''
+                }
+            },
+            methods:{
+                onClickButton(e) {
+                    e.preventDefault()
+                    if (!this.text) {
+                        this.$refs.newword.focus()
+                        this.text = this.newtext
+                        this.newtext = ''
+                    }else{
+                        if(this.text[this.text.length - 1] === this.newtext[0]){
+                            this.result = "딩동댕"
+                            this.text = this.newtext
+                            this.newtext = ''
+                            this.$refs.newword.focus()
+                        }else{
+                            this.result = "땡"
+                            this.newtext = ''
+                            this.$refs.newword.focus()
+                        }
+                    }
+                }
+            }
+        })
+    </script>
+    <script>
+        const app = new Vue({
+            el: '#root',
+        })
+    </script>
+</body>
+
+</html>
